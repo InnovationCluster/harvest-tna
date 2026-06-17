@@ -188,7 +188,7 @@
   .submit-success { background: #2d6a2d; border-radius: 8px; padding: 18px; text-align: center; color: white; margin-top: 16px; display: none; }
   .submit-success .tick { font-size: 32px; margin-bottom: 8px; }
 
-  #netlify-form { display: none; }
+  .hidden-form { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   @media (max-width: 600px) {
     .results-grid { grid-template-columns: 1fr; }
@@ -205,7 +205,7 @@
   <p>Understand your startup's capability profile and identify priority areas for growth</p>
 </header>
 
-<form name="harvest-tna" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
+<form name="harvest-tna" data-netlify="true" netlify-honeypot="bot-field" class="hidden-form">
   <input type="hidden" name="form-name" value="harvest-tna">
   <input name="bot-field">
   <input name="founder_name">
