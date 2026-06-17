@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARVEST Agtech Accelerator — Training Needs Assessment</title>
+<style>
+  :root {
+    --green-dark: #1a3a1a;
+    --green-mid: #2d6a2d;
+    --green-bright: #4a9c4a;
+    --gold: #c8a84b;
+    --gold-light: #e8d08a;
+    --cream: #f9f6ef;
+    --white: #ffffff;
+    --grey-light: #f0ede6;
+    --grey-mid: #d0ccc0;
+    --grey-text: #5a5a4a;
+    --red: #c0392b;
+    --orange: #e67e22;
+    --text: #1a1a0f;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--green-dark);
+    color: white;
+    padding: 28px 24px 22px;
+    text-align: center;
+  }
+  header .wordmark { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  header h1 { font-size: 22px; font-weight: 700; color: white; margin-bottom: 4px; }
+  header p { font-size: 13px; color: rgba(255,255,255,0.65); }
+
+  .container { max-width: 760px; margin: 0 auto; padding: 28px 16px 60px; }
+
+  .progress-bar-wrap { background: var(--grey-light); border-radius: 20px; height: 6px; margin: 0 0 28px; overflow: hidden; }
+  .progress-bar-fill { height: 6px; background: linear-gradient(90deg, var(--green-mid), var(--gold)); border-radius: 20px; transition: width 0.4s ease; }
+  .progress-label { font-size: 12px; color: var(--grey-text); text-align: right; margin-bottom: 6px; }
+
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .card-icon { width: 40px; height: 40px; border-radius: 8px; background: var(--green-dark); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .card-title { font-size: 17px; font-weight: 700; color: var(--green-dark); }
+  .card-subtitle { font-size: 12px; color: var(--grey-text); margin-top: 2px; }
+
+  .question { margin-bottom: 22px; }
+  .question label { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; line-height: 1.4; }
+  .options { display: flex; flex-direction: column; gap: 7px; }
+  .option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--grey-mid);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13.5px;
+    color: var(--grey-text);
+    background: var(--grey-light);
+    user-select: none;
+  }
+  .option:hover { border-color: var(--green-bright); color: var(--text); background: white; }
+  .option.selected { border-color: var(--green-mid); background: #e8f4e8; color: var(--green-dark); font-weight: 600; }
+  .option .radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--grey-mid); flex-shrink: 0; transition: all 0.15s; }
+  .option.selected .radio { border-color: var(--green-mid); background: var(--green-mid); }
+
+  .intake-intro { font-size: 14px; color: var(--grey-text); line-height: 1.65; margin-bottom: 24px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 7px; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--grey-mid);
+    border-radius: 7px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--grey-light);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--green-mid); background: white; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .nav-buttons { display: flex; gap: 12px; margin-top: 24px; }
+  .btn {
+    padding: 12px 24px; border: none; border-radius: 7px;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-primary { background: var(--green-dark); color: white; flex: 1; }
+  .btn-primary:hover { background: var(--green-mid); }
+  .btn-primary:disabled { background: var(--grey-mid); cursor: not-allowed; }
+  .btn-secondary { background: var(--grey-light); color: var(--grey-text); border: 1.5px solid var(--grey-mid); }
+  .btn-secondary:hover { background: white; color: var(--text); }
+  .btn-gold { background: var(--gold); color: var(--green-dark); flex: 1; }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-outline { background: white; color: var(--green-dark); border: 2px solid var(--green-dark); flex: 1; }
+  .btn-outline:hover { background: var(--grey-light); }
+
+  .section-tag {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--gold); background: var(--green-dark);
+    padding: 3px 10px; border-radius: 4px; margin-bottom: 14px;
+  }
+
+  .radar-wrap { text-align: center; margin: 0 auto 24px; max-width: 380px; }
+  canvas#radarChart { width: 100% !important; height: auto !important; }
+
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+  .result-card {
+    padding: 14px 16px; border-radius: 8px; border-left: 4px solid var(--green-mid);
+    background: var(--grey-light);
+  }
+  .result-card.strength { border-left-color: var(--green-bright); background: #eef7ee; }
+  .result-card.focus { border-left-color: var(--orange); background: #fef6ee; }
+  .result-card.priority { border-left-color: var(--red); background: #fef0ee; }
+  .result-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-text); margin-bottom: 4px; }
+  .result-score { font-size: 22px; font-weight: 800; color: var(--green-dark); }
+  .result-name { font-size: 12px; color: var(--grey-text); margin-top: 2px; }
+  .result-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 6px; }
+  .tag-strength { background: #c8efc8; color: #1a5a1a; }
+  .tag-focus { background: #fde8cc; color: #7a3a00; }
+  .tag-priority { background: #fdd8d4; color: #7a1a0a; }
+
+  .ai-feedback-section { margin-top: 16px; }
+  .ai-feedback-box {
+    background: var(--grey-light); border: 1.5px solid var(--grey-mid);
+    border-radius: 8px; padding: 16px; font-size: 13.5px; line-height: 1.7;
+    color: var(--text); min-height: 60px;
+  }
+  .ai-feedback-box.loading { color: var(--grey-text); font-style: italic; }
+  .ai-feedback-box.error { color: var(--red); }
+  .ai-dim-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .ai-dim-title { font-size: 14px; font-weight: 700; color: var(--green-dark); }
+  .btn-ai { font-size: 12px; padding: 6px 14px; background: var(--green-dark); color: white; border: none; border-radius: 5px; cursor: pointer; }
+  .btn-ai:hover { background: var(--green-mid); }
+
+  .mentor-intro { font-size: 14px; color: var(--grey-text); line-height: 1.65; margin-bottom: 22px; }
+  .mentor-area { margin-bottom: 18px; }
+  .mentor-area label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .mentor-area textarea {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--grey-mid); border-radius: 7px;
+    font-size: 13.5px; color: var(--text); background: var(--grey-light);
+    outline: none; resize: vertical; min-height: 80px; font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .mentor-area textarea:focus { border-color: var(--green-mid); background: white; }
+  .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+  .checkbox-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border: 1.5px solid var(--grey-mid);
+    border-radius: 7px; cursor: pointer; background: var(--grey-light);
+    transition: all 0.15s;
+  }
+  .checkbox-item:hover { border-color: var(--green-bright); background: white; }
+  .checkbox-item.checked { border-color: var(--green-mid); background: #e8f4e8; }
+  .checkbox-item input[type="checkbox"] { margin-top: 2px; accent-color: var(--green-mid); flex-shrink: 0; width: 16px; height: 16px; }
+  .checkbox-item span { font-size: 13.5px; color: var(--grey-text); line-height: 1.4; }
+  .checkbox-item.checked span { color: var(--green-dark); font-weight: 600; }
+  .star-rating { display: flex; gap: 8px; margin-top: 4px; }
+  .star { font-size: 28px; cursor: pointer; color: var(--grey-mid); transition: color 0.1s; }
+  .star.active { color: var(--gold); }
+  .scale-options { display: flex; gap: 6px; flex-wrap: wrap; }
+  .scale-btn {
+    width: 42px; height: 42px; border-radius: 7px; border: 1.5px solid var(--grey-mid);
+    background: var(--grey-light); font-size: 14px; font-weight: 600; cursor: pointer;
+    color: var(--grey-text); transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+  }
+  .scale-btn:hover { border-color: var(--green-bright); background: white; }
+  .scale-btn.selected { border-color: var(--green-mid); background: #e8f4e8; color: var(--green-dark); }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--grey-text); margin-top: 4px; }
+
+  .submit-box { background: var(--green-dark); border-radius: var(--radius); padding: 24px; color: white; text-align: center; margin-top: 24px; }
+  .submit-box h3 { font-size: 17px; margin-bottom: 8px; }
+  .submit-box p { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 18px; }
+  .submit-success { background: #2d6a2d; border-radius: 8px; padding: 18px; text-align: center; color: white; margin-top: 16px; display: none; }
+  .submit-success .tick { font-size: 32px; margin-bottom: 8px; }
+
+  #netlify-form { display: none; }
+
+  @media (max-width: 600px) {
+    .results-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">HARVEST Agtech Accelerator</div>
+  <h1>Training Needs Assessment</h1>
+  <p>Understand your startup's capability profile and identify priority areas for growth</p>
+</header>
+
+<form name="harvest-tna" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
+  <input type="hidden" name="form-name" value="harvest-tna">
+  <input name="bot-field">
+  <input name="founder_name">
+  <input name="company">
+  <input name="stage">
+  <input name="assessment_type">
+  <input name="submission_date">
+  <input name="score_problem_market">
+  <input name="score_product_tech">
+  <input name="score_commercialisation">
+  <input name="score_team">
+  <input name="score_investment">
+  <input name="score_impact">
+  <input name="overall_score">
+  <input name="mentor_expertise_areas">
+  <input name="mentor_challenge">
+  <input name="mentor_style">
+  <input name="mentor_availability">
+  <input name="mentor_goals">
+  <input name="mentor_other">
+  <input name="mentoring_rating">
+  <input name="mentoring_sessions">
+  <input name="mentoring_impact">
+  <input name="mentoring_highlight">
+  <input name="mentoring_improve">
+  <input name="mentoring_recommend">
+</form>
+
+<div class="container">
+  <div id="app"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+let state = {
+  screen: 'intake',
+  section: 0,
+  intake: { name: '', company: '', stage: '', type: '' },
+  answers: {},
+  mentorData: {},
+  scores: {}
+};
+
+const dimensions = [
+  {
+    id: 'problem_market', label: 'Problem & Market', icon: '🌾',
+    desc: 'Customer discovery, market size & regulatory awareness',
+    questions: [
+      { id: 'pm1', text: 'How well defined is the problem your agtech solution addresses?', options: ['We have early assumptions', 'We have talked to some potential customers', 'We have validated the problem with 10+ potential customers', 'We have paying customers confirming the problem'] },
+      { id: 'pm2', text: 'How would you describe your understanding of the total addressable market?', options: ['We haven\'t sized the market yet', 'We have a rough estimate based on desk research', 'We have a bottoms-up market model', 'We have third-party validated market data'] },
+      { id: 'pm3', text: 'How familiar is your team with regulatory requirements in your target market?', options: ['We haven\'t explored regulation yet', 'We are aware of key regulations but haven\'t mapped them', 'We have mapped key regulatory requirements', 'We have a regulatory strategy and relationships in place'] },
+      { id: 'pm4', text: 'How well do you understand your target customer\'s decision-making process?', options: ['We haven\'t mapped the buying journey', 'We have a rough idea based on desk research', 'We have talked to buyers and mapped their process', 'We have closed sales and refined our understanding'] },
+      { id: 'pm5', text: 'How clearly defined is your target customer segment?', options: ['Anyone who could benefit from our solution', 'A broad sector (e.g. grain growers)', 'A specific segment (e.g. irrigated grain growers in WA > 500ha)', 'A precise ICP with validated characteristics and access strategy'] }
+    ]
+  },
+  {
+    id: 'product_tech', label: 'Product & Technology', icon: '🔬',
+    desc: 'Development stage, field validation, IP & scalability',
+    questions: [
+      { id: 'pt1', text: 'What stage is your core product or technology at?', options: ['Concept or idea stage', 'Prototype or proof of concept', 'Pilot or MVP in use', 'Commercial product with active customers'] },
+      { id: 'pt2', text: 'How much field or real-world validation has your solution received?', options: ['No field testing yet', 'Limited internal testing', 'Field trials with 1–3 collaborators', 'Multiple field trials across different conditions'] },
+      { id: 'pt3', text: 'How would you describe your IP position?', options: ['No formal IP protection or strategy', 'We are aware of IP options but haven\'t acted', 'We have filed or are in the process of filing IP', 'We have granted patents or a clear IP strategy'] },
+      { id: 'pt4', text: 'How scalable is your current technology or solution?', options: ['Significant re-engineering required to scale', 'Some elements need rework to scale', 'We have a clear path to scale with known costs', 'The solution is built to scale from day one'] },
+      { id: 'pt5', text: 'How well does your product integrate with existing farm or agribusiness systems?', options: ['Integration not yet considered', 'We are aware of integration needs but haven\'t addressed them', 'We have a plan for key integrations', 'Key integrations are built and tested'] }
+    ]
+  },
+  {
+    id: 'commercialisation', label: 'Commercialisation', icon: '📈',
+    desc: 'Revenue model, go-to-market & ag sales cycle knowledge',
+    questions: [
+      { id: 'co1', text: 'How developed is your revenue model?', options: ['No revenue model yet', 'We have a broad idea of how we\'ll make money', 'We have a defined revenue model but haven\'t tested it', 'We have a tested revenue model with paying customers'] },
+      { id: 'co2', text: 'How developed is your go-to-market strategy?', options: ['No GTM strategy yet', 'We have a rough plan but it\'s not documented', 'We have a documented GTM strategy', 'We have an active GTM strategy generating leads and sales'] },
+      { id: 'co3', text: 'How well does your team understand agricultural sales cycles?', options: ['We haven\'t considered ag-specific cycles', 'We are aware that ag cycles affect sales timing', 'We have mapped our sales process around ag seasons', 'We have successfully navigated multiple ag sales cycles'] },
+      { id: 'co4', text: 'How strong are your existing industry relationships and distribution channels?', options: ['No existing industry relationships', 'A few informal contacts in the sector', 'Active relationships with potential channel partners', 'Formal agreements with distributors or industry partners'] },
+      { id: 'co5', text: 'How clearly have you defined your pricing strategy?', options: ['No pricing defined', 'We have a rough idea based on cost or competitor research', 'We have a defined pricing model based on customer willingness to pay', 'We have validated pricing with sales evidence'] }
+    ]
+  },
+  {
+    id: 'team', label: 'Team & Capabilities', icon: '👥',
+    desc: 'Founding team completeness, ag experience & advisors',
+    questions: [
+      { id: 'tm1', text: 'How complete is your founding team for this venture?', options: ['Founder/s only', 'Core team in place', 'Full team in place', 'Full team + advisors'] },
+      { id: 'tm2', text: 'How would you describe your team\'s direct agricultural experience?', options: ['No direct ag experience in the team', 'Some exposure but not deep sector knowledge', 'One or more team members with strong ag industry background', 'Deep ag expertise central to the founding team'] },
+      { id: 'tm3', text: 'How strong is your team\'s technical capability relevant to your product?', options: ['Technical skills are a gap — we need to hire or partner', 'We have some technical capability but gaps remain', 'We have solid technical skills in-house', 'World-class technical expertise in the core team'] },
+      { id: 'tm4', text: 'How engaged are your advisors or mentors?', options: ['No advisors yet', 'A few informal advisors', 'A structured advisory board with relevant expertise', 'Active advisors with deep ag industry networks providing regular input'] },
+      { id: 'tm5', text: 'How does your team handle gaps in capability or knowledge?', options: ['We don\'t yet have a process for identifying gaps', 'We identify gaps but are slow to address them', 'We actively identify gaps and seek support', 'We have a systematic approach to building capability and filling gaps quickly'] }
+    ]
+  },
+  {
+    id: 'investment', label: 'Investment Readiness', icon: '💰',
+    desc: 'Financials, pitch & investor conversations',
+    questions: [
+      { id: 'iv1', text: 'How developed are your financial projections?', options: ['No financial projections yet', 'Back-of-envelope estimates only', 'A 3-year model with key assumptions', 'A detailed financial model stress-tested with advisors'] },
+      { id: 'iv2', text: 'Do you have a pitch deck?', options: ['Not started', 'Draft in progress', 'Completed and tested with friends/family', 'Investor-tested'] },
+      { id: 'iv3', text: 'How active are your investor conversations?', options: ['We haven\'t approached investors yet', 'We have had one or two informal conversations', 'We are actively pitching to investors', 'We have received term sheets or closed investment'] },
+      { id: 'iv4', text: 'How well defined is your funding ask and use of funds?', options: ['We haven\'t defined a funding ask', 'We have a rough idea of how much we need', 'We have a clear ask with a high-level use of funds', 'We have a detailed use-of-funds aligned to a clear value inflection'] },
+      { id: 'iv5', text: 'How familiar is your team with the agtech investment landscape?', options: ['Very limited awareness of ag-focused investors', 'We know some relevant investors but haven\'t engaged', 'We have mapped the agtech investor landscape and begun engagement', 'We have strong relationships with relevant ag investors'] }
+    ]
+  },
+  {
+    id: 'impact', label: 'Impact & Sustainability', icon: '🌱',
+    desc: 'Environmental/social metrics, ESG & First Nations considerations',
+    questions: [
+      { id: 'im1', text: 'How well defined are your environmental and social impact metrics?', options: ['We haven\'t defined impact metrics yet', 'We have a broad sense of our positive impact', 'We have defined impact metrics but aren\'t measuring them yet', 'We actively measure and report on our impact metrics'] },
+      { id: 'im2', text: 'How embedded is sustainability in your business model?', options: ['Sustainability is not central to our model', 'We consider sustainability but it\'s not core', 'Sustainability is a key value proposition', 'Sustainability is central to our model and a competitive advantage'] },
+      { id: 'im3', text: 'How would you describe your approach to ESG reporting or frameworks?', options: ['No awareness or engagement with ESG frameworks', 'Aware of ESG but haven\'t engaged formally', 'We are exploring relevant ESG frameworks', 'We report against an ESG framework or are working toward this'] },
+      { id: 'im4', text: 'Have you considered First Nations perspectives and engagement in your business?', options: ['Not yet considered', 'Aware this is important but haven\'t engaged', 'We have begun conversations with First Nations stakeholders', 'First Nations perspectives are actively embedded in our approach'] },
+      { id: 'im5', text: 'Do you have a pathway to B Corp, carbon credit, or similar certification?', options: ['Not relevant', 'Unaware of options', 'Aware of options and exploring', 'Pursuing or achieved'] }
+    ]
+  }
+];
+
+const mentorQuestions = {
+  pre: [
+    { id: 'mentor_expertise_areas', type: 'checkbox', label: 'Which areas would you most value mentoring support in? (Select all that apply)', options: ['Customer discovery and problem validation', 'Agricultural industry networks and relationships', 'Product development and technical scale-up', 'Commercialisation and go-to-market strategy', 'Financial modelling and fundraising', 'Pitch development and investor relations', 'Team building and leadership', 'Regulatory navigation', 'ESG, sustainability and impact measurement', 'Export and international market entry'] },
+    { id: 'mentor_challenge', type: 'textarea', label: 'What is the single biggest challenge you are trying to solve right now? (2–3 sentences)', placeholder: 'Describe your most pressing challenge...' },
+    { id: 'mentor_style', type: 'options', label: 'What kind of mentoring style works best for you?', options: ['A sounding board — I want someone to think through problems with me', 'A challenger — I want someone who will push back and stress-test my thinking', 'A connector — I want introductions to customers, investors and industry contacts', 'A coach — I want structured guidance and accountability', 'A domain expert — I want deep technical or sector knowledge I can tap into'] },
+    { id: 'mentor_availability', type: 'options', label: 'How would you prefer to engage with your mentor?', options: ['Monthly check-in (1 hour/month)', 'Fortnightly catch-up (30–45 min, fortnightly)', 'Intensive sprint (weekly for 4–6 weeks, then tapering)', 'On-demand — as needed rather than scheduled'] },
+    { id: 'mentor_goals', type: 'textarea', label: 'What would a successful mentoring relationship look like for you by the end of the program?', placeholder: 'E.g. secured first commercial customer, completed a raise, connected with three key industry partners...' },
+    { id: 'mentor_other', type: 'textarea', label: 'Is there anything else that would help us match you with the right mentor? (optional)', placeholder: 'E.g. preferred background, lived experience, geographic knowledge, language...', optional: true }
+  ],
+  post: [
+    { id: 'mentoring_rating', type: 'stars', label: 'Overall, how would you rate your mentoring experience during the program?' },
+    { id: 'mentoring_sessions', type: 'options', label: 'How many mentoring sessions did you have with your mentor?', options: ['1–2 sessions', '3–4 sessions', '5–6 sessions', '7 or more sessions'] },
+    { id: 'mentoring_impact', type: 'scale', label: 'How much impact did your mentoring have on your startup\'s progress? (1 = no impact, 10 = transformational)', min: 1, max: 10 },
+    { id: 'mentoring_highlight', type: 'textarea', label: 'What was the most valuable thing your mentor helped you with?', placeholder: 'Describe the most impactful contribution your mentor made...' },
+    { id: 'mentoring_improve', type: 'textarea', label: 'What could have made the mentoring experience even better?', placeholder: 'E.g. more sessions, different focus areas, better initial matching...' },
+    { id: 'mentoring_recommend', type: 'options', label: 'Would you recommend that HARVEST continue the mentoring program for future cohorts?', options: ['Definitely — it was one of the most valuable parts of the program', 'Yes, with some improvements', 'Neutral — it was helpful but not critical', 'Probably not in its current form', 'No — other support would be better use of resources'] }
+  ]
+};
+
+function render() {
+  const app = document.getElementById('app');
+  if (state.screen === 'intake') app.innerHTML = renderIntake();
+  else if (state.screen === 'assessment') app.innerHTML = renderAssessment();
+  else if (state.screen === 'mentor') app.innerHTML = renderMentor();
+  else if (state.screen === 'results') { app.innerHTML = renderResults(); drawRadar(); }
+  attachHandlers();
+}
+
+function renderIntake() {
+  return `
+    <div class="card">
+      <div class="section-tag">Before you begin</div>
+      <div class="card-header">
+        <div class="card-icon">🌿</div>
+        <div><div class="card-title">Welcome to the HARVEST TNA</div><div class="card-subtitle">Training Needs Assessment — takes about 10–15 minutes</div></div>
+      </div>
+      <p class="intake-intro">This assessment helps us understand where your startup is at across six key dimensions, so we can tailor program support to your specific needs. Your responses are confidential and will only be used by the HARVEST team to better support you.</p>
+      <div class="form-row">
+        <div class="form-group"><label>Your name *</label><input type="text" id="i-name" placeholder="e.g. Alex Johnson" value="${state.intake.name}"></div>
+        <div class="form-group"><label>Company / venture name *</label><input type="text" id="i-company" placeholder="e.g. Soilsense Pty Ltd" value="${state.intake.company}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Startup stage *</label>
+          <select id="i-stage">
+            <option value="" ${!state.intake.stage?'selected':''}>Select stage...</option>
+            <option value="Idea / concept" ${state.intake.stage==='Idea / concept'?'selected':''}>Idea / concept</option>
+            <option value="Early development" ${state.intake.stage==='Early development'?'selected':''}>Early development</option>
+            <option value="Prototype / MVP" ${state.intake.stage==='Prototype / MVP'?'selected':''}>Prototype / MVP</option>
+            <option value="Pilot / early traction" ${state.intake.stage==='Pilot / early traction'?'selected':''}>Pilot / early traction</option>
+            <option value="Revenue generating" ${state.intake.stage==='Revenue generating'?'selected':''}>Revenue generating</option>
+            <option value="Scaling" ${state.intake.stage==='Scaling'?'selected':''}>Scaling</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Assessment point *</label>
+          <select id="i-type">
+            <option value="" ${!state.intake.type?'selected':''}>Select...</option>
+            <option value="Start of program" ${state.intake.type==='Start of program'?'selected':''}>Start of program</option>
+            <option value="End of program" ${state.intake.type==='End of program'?'selected':''}>End of program</option>
+          </select>
+        </div>
+      </div>
+      <div class="nav-buttons"><button class="btn btn-primary" onclick="startAssessment()">Begin assessment →</button></div>
+    </div>`;
+}
+
+function startAssessment() {
+  const name = document.getElementById('i-name').value.trim();
+  const company = document.getElementById('i-company').value.trim();
+  const stage = document.getElementById('i-stage').value;
+  const type = document.getElementById('i-type').value;
+  if (!name || !company || !stage || !type) { alert('Please complete all fields before continuing.'); return; }
+  state.intake = { name, company, stage, type };
+  state.screen = 'assessment';
+  state.section = 0;
+  window.scrollTo({ top: 0 });
+  render();
+}
+
+function renderAssessment() {
+  const dim = dimensions[state.section];
+  const pct = Math.round((state.section / dimensions.length) * 100);
+  const answered = dim.questions.filter(q => state.answers[q.id] !== undefined).length;
+  return `
+    <div class="progress-label">Section ${state.section + 1} of ${dimensions.length}</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+    <div class="card">
+      <div class="section-tag">Dimension ${state.section + 1}</div>
+      <div class="card-header">
+        <div class="card-icon">${dim.icon}</div>
+        <div><div class="card-title">${dim.label}</div><div class="card-subtitle">${dim.desc}</div></div>
+      </div>
+      ${dim.questions.map(q => renderQuestion(q)).join('')}
+      <div class="nav-buttons">
+        ${state.section > 0 ? `<button class="btn btn-secondary" onclick="prevSection()">← Back</button>` : ''}
+        <button class="btn btn-primary" onclick="nextSection()" ${answered < dim.questions.length ? 'disabled' : ''}>
+          ${state.section < dimensions.length - 1 ? 'Next section →' : 'Continue to mentor matching →'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderQuestion(q) {
+  return `<div class="question"><label>${q.text}</label><div class="options">${q.options.map((opt, i) => `<div class="option ${state.answers[q.id] === i ? 'selected' : ''}" onclick="selectAnswer('${q.id}', ${i})"><div class="radio"></div>${opt}</div>`).join('')}</div></div>`;
+}
+
+function selectAnswer(qid, idx) { state.answers[qid] = idx; render(); }
+function prevSection() { state.section--; window.scrollTo({ top: 0 }); render(); }
+
+function nextSection() {
+  const dim = dimensions[state.section];
+  const answered = dim.questions.filter(q => state.answers[q.id] !== undefined).length;
+  if (answered < dim.questions.length) { alert('Please answer all questions before continuing.'); return; }
+  if (state.section < dimensions.length - 1) { state.section++; window.scrollTo({ top: 0 }); render(); }
+  else { calculateScores(); state.screen = 'mentor'; window.scrollTo({ top: 0 }); render(); }
+}
+
+function calculateScores() {
+  state.scores = {};
+  dimensions.forEach(dim => {
+    const total = dim.questions.reduce((sum, q) => sum + (state.answers[q.id] || 0), 0);
+    state.scores[dim.id] = Math.round((total / (dim.questions.length * 3)) * 100);
+  });
+}
+
+function renderMentor() {
+  const isPre = state.intake.type === 'Start of program';
+  const qs = isPre ? mentorQuestions.pre : mentorQuestions.post;
+  const intro = isPre
+    ? 'Based on your assessment, we\'d like to match you with the right mentor for your journey through the HARVEST program. Your answers below will help us make the best possible match. There are no right or wrong answers — just be honest about what you need most.'
+    : 'Thank you for completing the end-of-program assessment. We\'d love to hear about your mentoring experience so we can continue to improve the program for future cohorts.';
+  return `
+    <div class="progress-label">Almost done — just a few more questions</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:90%"></div></div>
+    <div class="card">
+      <div class="section-tag">${isPre ? 'Mentor matching' : 'Program feedback'}</div>
+      <div class="card-header">
+        <div class="card-icon">${isPre ? '🤝' : '💬'}</div>
+        <div><div class="card-title">${isPre ? 'Mentor Matching' : 'Mentoring Feedback'}</div><div class="card-subtitle">${isPre ? 'Help us find the right mentor for your venture' : 'Tell us how the mentoring went'}</div></div>
+      </div>
+      <p class="mentor-intro">${intro}</p>
+      ${qs.map(q => renderMentorQuestion(q)).join('')}
+      <div class="nav-buttons">
+        <button class="btn btn-secondary" onclick="backToAssessment()">← Back</button>
+        <button class="btn btn-primary" onclick="showResults()">View my results →</button>
+      </div>
+    </div>`;
+}
+
+function renderMentorQuestion(q) {
+  const val = state.mentorData[q.id];
+  if (q.type === 'checkbox') {
+    const checked = val || [];
+    return `<div class="mentor-area"><label>${q.label}</label><div class="checkbox-group">${q.options.map((opt, i) => `<label class="checkbox-item ${checked.includes(i)?'checked':''}"><input type="checkbox" ${checked.includes(i)?'checked':''} onchange="toggleCheckbox('${q.id}', ${i})"><span>${opt}</span></label>`).join('')}</div></div>`;
+  }
+  if (q.type === 'textarea') {
+    return `<div class="mentor-area"><label>${q.label}</label><textarea id="mq-${q.id}" placeholder="${q.placeholder||''}" oninput="saveMentorText('${q.id}')">${val||''}</textarea></div>`;
+  }
+  if (q.type === 'options') {
+    return `<div class="mentor-area"><label>${q.label}</label><div class="options">${q.options.map((opt, i) => `<div class="option ${val===i?'selected':''}" onclick="selectMentorOption('${q.id}', ${i})"><div class="radio"></div>${opt}</div>`).join('')}</div></div>`;
+  }
+  if (q.type === 'stars') {
+    const rating = val || 0;
+    return `<div class="mentor-area"><label>${q.label}</label><div class="star-rating">${[1,2,3,4,5].map(n => `<span class="star ${rating>=n?'active':''}" onclick="setStars('${q.id}', ${n})">★</span>`).join('')}</div></div>`;
+  }
+  if (q.type === 'scale') {
+    const nums = Array.from({length: q.max - q.min + 1}, (_, i) => i + q.min);
+    return `<div class="mentor-area"><label>${q.label}</label><div class="scale-options">${nums.map(n => `<button class="scale-btn ${val===n?'selected':''}" onclick="setScale('${q.id}', ${n})">${n}</button>`).join('')}</div><div class="scale-labels"><span>No impact</span><span>Transformational</span></div></div>`;
+  }
+  return '';
+}
+
+function toggleCheckbox(id, idx) {
+  if (!state.mentorData[id]) state.mentorData[id] = [];
+  const arr = state.mentorData[id];
+  const pos = arr.indexOf(idx);
+  if (pos > -1) arr.splice(pos, 1); else arr.push(idx);
+  render();
+}
+function saveMentorText(id) { state.mentorData[id] = document.getElementById('mq-' + id)?.value || ''; }
+function selectMentorOption(id, idx) { state.mentorData[id] = idx; render(); }
+function setStars(id, n) { state.mentorData[id] = n; render(); }
+function setScale(id, n) { state.mentorData[id] = n; render(); }
+function backToAssessment() { state.section = dimensions.length - 1; state.screen = 'assessment'; window.scrollTo({ top: 0 }); render(); }
+function showResults() { state.screen = 'results'; window.scrollTo({ top: 0 }); render(); }
+
+function renderResults() {
+  const overall = Math.round(Object.values(state.scores).reduce((a,b) => a+b, 0) / dimensions.length);
+  const sorted = [...dimensions].sort((a,b) => state.scores[b.id] - state.scores[a.id]);
+  function getTag(s) { return s >= 67 ? '<span class="result-tag tag-strength">Strength</span>' : s >= 40 ? '<span class="result-tag tag-focus">Focus area</span>' : '<span class="result-tag tag-priority">Priority</span>'; }
+  function getClass(s) { return s >= 67 ? 'strength' : s >= 40 ? 'focus' : 'priority'; }
+  return `
+    <div class="card">
+      <div class="section-tag">Your results</div>
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div><div class="card-title">${state.intake.company} — ${state.intake.type}</div><div class="card-subtitle">${state.intake.name} · ${state.intake.stage} · Overall readiness: ${overall}%</div></div>
+      </div>
+      <div class="radar-wrap"><canvas id="radarChart" width="360" height="360"></canvas></div>
+      <div class="results-grid">${sorted.map(dim => `<div class="result-card ${getClass(state.scores[dim.id])}"><div class="result-label">${dim.icon} ${dim.label}</div><div class="result-score">${state.scores[dim.id]}%</div>${getTag(state.scores[dim.id])}</div>`).join('')}</div>
+    </div>
+    ${dimensions.map(dim => `
+    <div class="card">
+      <div class="ai-dim-header">
+        <div class="ai-dim-title">${dim.icon} ${dim.label} — ${state.scores[dim.id]}%</div>
+        <button class="btn-ai" onclick="getFeedback('${dim.id}')">Get AI feedback</button>
+      </div>
+      <div class="ai-feedback-section">
+        <div id="feedback-${dim.id}" class="ai-feedback-box" style="display:none;"></div>
+      </div>
+    </div>`).join('')}
+    <div class="card submit-box">
+      <h3>Submit your results to HARVEST</h3>
+      <p>Your scores and mentor preferences will be sent to the HARVEST team so we can tailor your program experience.</p>
+      <div class="nav-buttons" style="justify-content:center;">
+        <button class="btn btn-gold" onclick="submitResults()">Submit to HARVEST →</button>
+        <button class="btn btn-outline" onclick="copyResults()" style="border-color:rgba(255,255,255,0.4);color:white;">Copy results</button>
+      </div>
+      <div id="submit-success" class="submit-success">
+        <div class="tick">✅</div>
+        <strong>Results submitted!</strong><br>
+        <span style="font-size:13px;opacity:0.85;">The HARVEST team will be in touch. You can now close this window.</span>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn btn-secondary" onclick="restart()" style="width:100%;margin-top:8px;">Start again</button>
+      </div>
+    </div>`;
+}
+
+function drawRadar() {
+  setTimeout(() => {
+    const canvas = document.getElementById('radarChart');
+    if (!canvas) return;
+    new Chart(canvas.getContext('2d'), {
+      type: 'radar',
+      data: {
+        labels: dimensions.map(d => d.label),
+        datasets: [{ label: state.intake.company, data: dimensions.map(d => state.scores[d.id]), backgroundColor: 'rgba(45,106,45,0.18)', borderColor: '#2d6a2d', borderWidth: 2.5, pointBackgroundColor: '#c8a84b', pointRadius: 5 }]
+      },
+      options: { responsive: true, scales: { r: { min: 0, max: 100, ticks: { stepSize: 25, font: { size: 10 }, color: '#5a5a4a' }, grid: { color: 'rgba(0,0,0,0.08)' }, pointLabels: { font: { size: 11, weight: '600' }, color: '#1a3a1a' } } }, plugins: { legend: { display: false } } }
+    });
+  }, 50);
+}
+
+async function getFeedback(dimId) {
+  const dim = dimensions.find(d => d.id === dimId);
+  const score = state.scores[dimId];
+  const box = document.getElementById('feedback-' + dimId);
+  box.style.display = 'block';
+  box.className = 'ai-feedback-box loading';
+  box.textContent = 'Generating feedback...';
+
+  const answers = dim.questions.map(q => `Q: ${q.text}\nA: ${q.options[state.answers[q.id] || 0]}`).join('\n\n');
+  const prompt = `You are an expert advisor for the HARVEST Agtech Accelerator in Western Australia. A startup founder has just completed a Training Needs Assessment.
+
+Company: ${state.intake.company}
+Founder: ${state.intake.name}
+Stage: ${state.intake.stage}
+Assessment point: ${state.intake.type}
+Dimension: ${dim.label}
+Score: ${score}%
+
+Their answers:
+${answers}
+
+Write 3–4 sentences of practical, specific feedback for this dimension. Be direct and constructive. Acknowledge what's working, identify the most important gap, and suggest one concrete next step they can take now. Use plain language appropriate for an early-stage agtech founder.`;
+
+  try {
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    if (data.content && data.content[0]) {
+      box.className = 'ai-feedback-box';
+      box.textContent = data.content[0].text;
+    } else {
+      throw new Error('No response');
+    }
+  } catch (e) {
+    box.className = 'ai-feedback-box error';
+    box.textContent = 'Could not load AI feedback. Please try again.';
+  }
+}
+
+function copyResults() {
+  const lines = [`HARVEST TNA — ${state.intake.company} (${state.intake.type})`, `Founder: ${state.intake.name} | Stage: ${state.intake.stage}`, `Date: ${new Date().toLocaleDateString('en-AU')}`, '', ...dimensions.map(d => `${d.label}: ${state.scores[d.id]}%`), '', `Overall: ${Math.round(Object.values(state.scores).reduce((a,b)=>a+b,0)/dimensions.length)}%`];
+  navigator.clipboard.writeText(lines.join('\n')).then(() => alert('Results copied to clipboard!'));
+}
+
+function submitResults() {
+  const isPre = state.intake.type === 'Start of program';
+  const qs = isPre ? mentorQuestions.pre : mentorQuestions.post;
+  function fmt(q) {
+    const val = state.mentorData[q.id];
+    if (q.type === 'checkbox' && Array.isArray(val)) return val.map(i => q.options[i]).join(', ');
+    if (q.type === 'options' && val !== undefined) return q.options[val];
+    if (q.type === 'stars') return val ? `${val}/5 stars` : '';
+    if (q.type === 'scale') return val !== undefined ? `${val}/10` : '';
+    return val || '';
+  }
+  const mentorFormatted = {};
+  qs.forEach(q => { mentorFormatted[q.id] = fmt(q); });
+  const body = new URLSearchParams({
+    'form-name': 'harvest-tna',
+    founder_name: state.intake.name,
+    company: state.intake.company,
+    stage: state.intake.stage,
+    assessment_type: state.intake.type,
+    submission_date: new Date().toLocaleString('en-AU', { timeZone: 'Australia/Perth' }),
+    score_problem_market: state.scores.problem_market + '%',
+    score_product_tech: state.scores.product_tech + '%',
+    score_commercialisation: state.scores.commercialisation + '%',
+    score_team: state.scores.team + '%',
+    score_investment: state.scores.investment + '%',
+    score_impact: state.scores.impact + '%',
+    overall_score: Math.round(Object.values(state.scores).reduce((a,b)=>a+b,0)/dimensions.length) + '%',
+    ...mentorFormatted
+  });
+  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
+    .then(() => { document.getElementById('submit-success').style.display = 'block'; })
+    .catch(() => alert('There was a problem submitting. Please try again.'));
+}
+
+function restart() {
+  state = { screen: 'intake', section: 0, intake: { name:'', company:'', stage:'', type:'' }, answers: {}, mentorData: {}, scores: {} };
+  window.scrollTo({ top: 0 });
+  render();
+}
+
+function attachHandlers() {}
+render();
+</script>
+</body>
+</html>
